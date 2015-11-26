@@ -1,0 +1,8 @@
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\square.png
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Canvas_theGame.exe
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Canvas_theGame.pdb
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\MonoGame.Framework.dll
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\OpenTK.dll
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\obj\x86\Debug\Canvas_theGame.csprojResolveAssemblyReference.cache
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\obj\x86\Debug\Canvas_theGame.exe
+c:\users\oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\obj\x86\Debug\Canvas_theGame.pdb
