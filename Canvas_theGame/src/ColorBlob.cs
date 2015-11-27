@@ -9,34 +9,43 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Canvas_theGame.src
 {
-    class Barrier
+    class ColorBlob
     {
         private Color color;
         private Rectangle dimensions;
         private static Texture2D texture;
+        private Game1.okColors colorEnum;
 
-        public static void Init(ContentManager Content) {
-            texture = Content.Load<Texture2D>("square.png");
+        public static void Init(ContentManager Content)
+        {
+            texture = Content.Load<Texture2D>("circle.png");
         }
 
-        public Barrier(Rectangle dimensions, Color color) {
+        public ColorBlob(Rectangle dimensions, Color color, Game1.okColors colorEnum)
+        {
             this.dimensions = dimensions;
             this.color = color;
+            this.colorEnum = colorEnum;
         }
 
-        public void Update() {
-                
+
+        public void Update()
+        {
+
         }
 
-        public void Draw(SpriteBatch spriteBatch) {
+        public void Draw(SpriteBatch spriteBatch)
+        {
             spriteBatch.Draw(texture, dimensions, color);
         }
-
 
 
         public Color getColor()
         {
             return color;
+        }
+        public Game1.okColors getColorEnum() {
+            return colorEnum;
         }
         public Rectangle getDimensions()
         {

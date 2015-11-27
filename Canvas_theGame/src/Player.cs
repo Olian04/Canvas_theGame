@@ -49,7 +49,7 @@ namespace Canvas_theGame.src
         private void updateColission(List<Barrier> barriers) {
             onGround = false;
             foreach (Barrier b in barriers) {
-                if (this.getColor() == b.getColor() && this.dimensions.Intersects(b.getDimensions())) {
+                if (b.getColor() != Game1.getSecondaryColor() && this.dimensions.Intersects(b.getDimensions())) {
                     relDirection relDir = relativDirection(dimensions, b.getDimensions());
 
                     if (relDir == relDirection.ABOVE)

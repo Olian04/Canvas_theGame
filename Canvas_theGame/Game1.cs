@@ -19,16 +19,15 @@ namespace Canvas_theGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        enum okColors {WHITE, BLACK, err};
-        Dictionary<okColors, Color> availableColors;
+        public enum okColors {WHITE, BLACK, ORANGE, BLUE, err};
+        private static Dictionary<okColors, Color> availableColors;
 
-        okColors primraryColor, secondaryColor;
-        okColors originalPrimraryColor, originalSecondaryColor;
+        static okColors primraryColor, secondaryColor;
 
         Player player;
-        Point startPos;
+        Point playerSize;
 
-        List<Barrier> barriers;
+        Level.levels currentLevel;
 
         public Game1()
         {
@@ -39,6 +38,17 @@ namespace Canvas_theGame
             Window.Position = new Point(300);
             IsMouseVisible = true;
             graphics.ApplyChanges();
+        }
+
+        public static Dictionary<okColors, Color> getAvailableColors() {
+            return availableColors;
+        }
+
+        public static Color getPrimraryColor() {
+            return availableColors[primraryColor];
+        }
+        public static Color getSecondaryColor() {
+            return availableColors[secondaryColor];
         }
 
         /// <summary>
@@ -52,41 +62,19 @@ namespace Canvas_theGame
             availableColors = new Dictionary<okColors, Color>();
             availableColors.Add(okColors.WHITE, Color.White);
             availableColors.Add(okColors.BLACK, Color.Black);
-
-            primraryColor = okColors.BLACK;
-            secondaryColor = okColors.WHITE;
+            availableColors.Add(okColors.ORANGE, Color.Orange);
+            availableColors.Add(okColors.BLUE, Color.Blue);
 
             Barrier.Init(Content);
-            barriers = new List<Barrier>();
-            this.loadLevel();
+            ColorBlob.Init(Content);
 
-            Point playerSize = new Point(15, 25);
-            startPos = new Point(350 - playerSize.X / 2, 250);
-            player = new Player(new Rectangle(startPos, playerSize), availableColors[primraryColor]);
+            playerSize = new Point(15, 25);
+            currentLevel = Level.levels.DEMO;
+            player = new Player(new Rectangle(new Point(/* Empty point; start pos is set in resetLevel. */), playerSize), availableColors[primraryColor]);
+
+            resetLevel();
 
             base.Initialize();
-        }
-
-        private void loadLevel() {
-            originalPrimraryColor = okColors.BLACK;
-            originalSecondaryColor = okColors.WHITE;
-            barriers.Add(new Barrier(new Rectangle(new Point(300, 300), new Point(100, 20)), availableColors[okColors.BLACK])); //Floor
-            barriers.Add(new Barrier(new Rectangle(new Point(300, 200), new Point(100, 20)), availableColors[okColors.BLACK])); //Roof
-            barriers.Add(new Barrier(new Rectangle(new Point(280, 200), new Point(20, 120)), availableColors[okColors.BLACK])); //Left wall
-            barriers.Add(new Barrier(new Rectangle(new Point(380, 200), new Point(20, 120)), availableColors[okColors.BLACK])); //Right wall
-
-            barriers.Add(new Barrier(new Rectangle(new Point(700, 300), new Point(100, 20)), availableColors[okColors.BLACK])); //Floor
-            barriers.Add(new Barrier(new Rectangle(new Point(700, 200), new Point(100, 20)), availableColors[okColors.BLACK])); //Roof
-            barriers.Add(new Barrier(new Rectangle(new Point(680, 200), new Point(20, 120)), availableColors[okColors.BLACK])); //Left wall
-            barriers.Add(new Barrier(new Rectangle(new Point(780, 200), new Point(20, 120)), availableColors[okColors.BLACK])); //Right wall
-
-            barriers.Add(new Barrier(new Rectangle(new Point(300, 600), new Point(500, 20)), availableColors[okColors.WHITE])); //Bottom Line
-
-            barriers.Add(new Barrier(new Rectangle(new Point(500, 500), new Point(100, 20)), availableColors[okColors.WHITE])); //White help line
-
-            barriers.Add(new Barrier(new Rectangle(new Point(500, 400), new Point(100, 20)), availableColors[okColors.BLACK])); //Black help line
-
-            barriers.Add(new Barrier(new Rectangle(new Point(700, 300), new Point(100, 20)), availableColors[okColors.WHITE])); //White end floor
         }
 
         /// <summary>
@@ -125,14 +113,14 @@ namespace Canvas_theGame
                     secondaryColor = holder;
                 }
 
-            foreach (Barrier b in barriers) {
+            foreach (Barrier b in Level.getBarriers()) {
                 b.Update();
             }
 
             if (player.getColor() != availableColors[primraryColor]) {
                 player.setColor(availableColors[primraryColor]);
             }
-            player.Update(barriers, ks, oldks);
+            player.Update(Level.getBarriers(), ks, oldks);
 
             if (player.getDimensions().Y > graphics.PreferredBackBufferHeight ||
                 player.getDimensions().Y < 0 ||
@@ -142,15 +130,26 @@ namespace Canvas_theGame
                 resetLevel();
             }
 
+            foreach (ColorBlob c in Level.getColorBlobs())
+            {
+                if (player.getDimensions().Intersects(c.getDimensions()))
+                {
+                    primraryColor = c.getColorEnum();
+                    Level.removeFromColorBlobs(c);
+                    break;
+                }
+            }
+
             oldks = ks;
             base.Update(gameTime);
         }
 
         private void resetLevel()
         {
-            player.setPosition(startPos);
-            primraryColor = originalPrimraryColor;
-            secondaryColor = originalSecondaryColor;
+            Level.loadLevel(currentLevel);
+            player.setPosition(Level.getStartPos());
+            primraryColor = Level.getOriginalPrimraryColor();
+            secondaryColor = Level.getOriginalSecondaryColor();
         }
 
         /// <summary>
@@ -165,10 +164,14 @@ namespace Canvas_theGame
 
             player.Draw(spriteBatch);
 
-            foreach (Barrier b in barriers) {
+            foreach (Barrier b in Level.getBarriers()) {
                 if (b.getColor() != availableColors[secondaryColor]) {
                     b.Draw(spriteBatch);
                 }
+            }
+
+            foreach (ColorBlob c in Level.getColorBlobs()) {
+                c.Draw(spriteBatch);
             }
 
             spriteBatch.End();
