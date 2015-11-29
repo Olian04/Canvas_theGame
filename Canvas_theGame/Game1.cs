@@ -113,19 +113,15 @@ namespace Canvas_theGame
                     secondaryColor = holder;
                 }
 
-            foreach (Barrier b in Level.getBarriers()) {
-                b.Update();
-            }
-
             if (player.getColor() != availableColors[primraryColor]) {
                 player.setColor(availableColors[primraryColor]);
             }
             player.Update(Level.getBarriers(), ks, oldks);
 
-            if (player.getDimensions().Y > graphics.PreferredBackBufferHeight ||
-                player.getDimensions().Y < 0 ||
-                player.getDimensions().X > graphics.PreferredBackBufferWidth ||
-                player.getDimensions().X < 0)
+            if (player.getDimensions().getBoundingBox().Y > graphics.PreferredBackBufferHeight ||
+                player.getDimensions().getBoundingBox().Y < 0 ||
+                player.getDimensions().getBoundingBox().X > graphics.PreferredBackBufferWidth ||
+                player.getDimensions().getBoundingBox().X < 0)
             {
                 resetLevel();
             }

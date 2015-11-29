@@ -12,7 +12,7 @@ namespace Canvas_theGame.src
     class Barrier
     {
         private Color color;
-        private Rectangle dimensions;
+        private AABB dimensions;
         private static Texture2D texture;
 
         public static void Init(ContentManager Content) {
@@ -20,7 +20,7 @@ namespace Canvas_theGame.src
         }
 
         public Barrier(Rectangle dimensions, Color color) {
-            this.dimensions = dimensions;
+            this.dimensions = new AABB(dimensions);
             this.color = color;
         }
 
@@ -29,7 +29,7 @@ namespace Canvas_theGame.src
         }
 
         public void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(texture, dimensions, color);
+            spriteBatch.Draw(texture, dimensions.getBoundingBox(), color);
         }
 
 
@@ -38,7 +38,7 @@ namespace Canvas_theGame.src
         {
             return color;
         }
-        public Rectangle getDimensions()
+        public AABB getDimensions()
         {
             return dimensions;
         }

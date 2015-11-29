@@ -14,7 +14,7 @@ namespace Canvas_theGame.src
         public enum levels {DEMO};
 
         private static Game1.okColors originalPrimraryColor, originalSecondaryColor;
-        private static Point startPos;
+        private static Vector2 startPos;
         private static List<Barrier> barriers;
         private static List<ColorBlob> colorBlobs;
 
@@ -34,7 +34,7 @@ namespace Canvas_theGame.src
                     break;
             }
         }
-        public static Point getStartPos() {
+        public static Vector2 getStartPos() {
             return startPos;
         }
         public static List<Barrier> getBarriers() {
@@ -56,7 +56,7 @@ namespace Canvas_theGame.src
         private void loadDEMO() {
             originalPrimraryColor = Game1.okColors.BLACK;
             originalSecondaryColor = Game1.okColors.WHITE;
-            startPos = new Point(350 - 7, 250); //7 = half player width.
+            startPos = new Vector2(350 - 7, 250); //7 = half player width.
 
             barriers.Add(new Barrier(new Rectangle(new Point(300, 300), new Point(100, 20)), availableColors[Game1.okColors.BLACK])); //Floor
             barriers.Add(new Barrier(new Rectangle(new Point(300, 200), new Point(100, 20)), availableColors[Game1.okColors.BLACK])); //Roof
