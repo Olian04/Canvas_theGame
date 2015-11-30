@@ -12,28 +12,31 @@ namespace Canvas_theGame.src
 {
     class Player
     {
-        private Color color;
+        private Game1.okColors colorEnum;
         private AABB dimensions;
         private Texture2D texture;
         private Vector2 velocity;
         private Vector2 maxVelocity;
-        private float deceleration, gravity, verticalSpeed;
-        private bool onGround;
+        private float jumpStrength;
+        private float deceleration, verticalSpeedGround, verticalSpeedAir;
+        private bool onGround, doPulse;
 
         public void Init(ContentManager Content) {
             texture = Content.Load<Texture2D>("square.png");
             velocity = new Vector2(0);
-            maxVelocity = new Vector2(10, 8);
-            deceleration = 3;
-            gravity = 1;
-            verticalSpeed = 1;
+            maxVelocity = new Vector2(7, 10); //X=horizontal, Y=vertical.
+            deceleration = 2;
+            verticalSpeedGround = 0.5f;
+            verticalSpeedAir = 0.25f;
+            jumpStrength = 17;
             onGround = false;
+            doPulse = false;
         }
 
-        public Player(Rectangle dimensions, Color color)
+        public Player(Rectangle dimensions, Game1.okColors colorEnum)
         {
             this.dimensions = new AABB(dimensions);
-            this.color = color;
+            this.colorEnum = colorEnum;
         }
 
         public void Update(List<Barrier> barriers, KeyboardState ks, KeyboardState oldks)
@@ -44,12 +47,20 @@ namespace Canvas_theGame.src
             
             updateColission(barriers);
 
+            Level.Update(dimensions);
+
+            if (doPulse) {
+                foreach (Barrier b in barriers) {
+                    b.pulseVisable();
+                }
+            }
+
         }
 
         private void updateColission(List<Barrier> barriers) {
             onGround = false;
             foreach (Barrier b in barriers) {
-                if (Game1.getSecondaryColor() != b.getColor()) {
+                if (Game1.getPrimraryColor() == b.getColor()) {
                     if (dimensions.isAbove(b.getDimensions()))
                     {
                         dimensions.setPositionY(b.getDimensions().getBoundingBox().Top - dimensions.getBoundingBox().Height);
@@ -77,66 +88,106 @@ namespace Canvas_theGame.src
         }
 
         private void updateInput(KeyboardState ks, KeyboardState oldks) {
-            if (ks.IsKeyDown(Keys.Right))
+            doPulse = false;
+            if (onGround)
             {
-                alterVelocityAdition(new Vector2(verticalSpeed + deceleration, 0));
+                if (ks.IsKeyDown(Keys.Right))
+                {
+                    alterVelocityAdition(new Vector2(verticalSpeedGround + deceleration, 0));
+                }
+                if (ks.IsKeyDown(Keys.Left))
+                {
+                    alterVelocityAdition(new Vector2(-(verticalSpeedGround + deceleration), 0));
+                }
             }
-            if (ks.IsKeyDown(Keys.Left))
+            else
             {
-                alterVelocityAdition(new Vector2(-(verticalSpeed + deceleration), 0));
+                if (ks.IsKeyDown(Keys.Right))
+                {
+                    alterVelocityAdition(new Vector2(verticalSpeedAir + deceleration, 0));
+                }
+                if (ks.IsKeyDown(Keys.Left))
+                {
+                    alterVelocityAdition(new Vector2(-(verticalSpeedAir + deceleration), 0));
+                }
             }
             if (onGround && ks.IsKeyDown(Keys.Up))
             {
-                velocity.Y = -20; //TODO: FIX THIS WORKAROUND!
+                velocity.Y = -jumpStrength; //TODO: FIX THIS WORKAROUND!
                 //alterPositionAdition(new Point(0,-3)); //for debug
             }
             if (ks.IsKeyDown(Keys.Down))
             {
+                doPulse = true;
                 //alterPositionAdition(new Point(0,3)); //for debug
             }
         }
 
         private void updateVelocity() {
-            if (velocity.X > deceleration)
-            {
-                alterVelocityAdition(new Vector2(-deceleration, 0));
-            }
-            else if (velocity.X < -deceleration)
-            {
-                alterVelocityAdition(new Vector2(deceleration, 0));
-            }
-            else if (velocity.X > 0)
-            {
-                alterVelocityAdition(new Vector2(-1, 0));
-            }
-            else if (velocity.X < 0)
-            {
-                alterVelocityAdition(new Vector2(1, 0));
-            }
-
-            if (velocity.Y < -maxVelocity.Y)
-            {
-                velocity.Y += gravity;
+            if (onGround) {
+                if (Math.Abs(velocity.X) < 1f)
+                {
+                    velocity.X = 0;
+                }
+                else if (velocity.X > deceleration)
+                {
+                    alterVelocityAdition(new Vector2(-deceleration, 0));
+                }
+                else if (velocity.X < -deceleration)
+                {
+                    alterVelocityAdition(new Vector2(deceleration, 0));
+                }
+                else if (velocity.X > 0)
+                {
+                    alterVelocityAdition(new Vector2(-1, 0));
+                }
+                else if (velocity.X < 0)
+                {
+                    alterVelocityAdition(new Vector2(1, 0));
+                }
             }
             else
             {
-                alterVelocityAdition(new Vector2(0, gravity));
+                if (Math.Abs(velocity.X) < 0.1f) {
+                    velocity.X = 0;
+                }
+                else if (velocity.X > 0)
+                {
+                    alterVelocityAdition(new Vector2(-(0.1f), 0));
+                }
+                else if (velocity.X < 0)
+                {
+                    alterVelocityAdition(new Vector2((0.1f), 0));
+                }
             }
+
+            if (velocity.Y < maxVelocity.Y)
+            {
+                alterVelocityAdition(new Vector2(0, Game1.getGravity()));
+            }
+
             alterPositionAdition(velocity);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, dimensions.getBoundingBox(), color);
+            spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
+            Rectangle rect = dimensions.getBoundingBox();
+            int border = 5;
+            rect.X += border;
+            rect.Y += border;
+            rect.Width -= border * 2;
+            rect.Height -= border * 2;
+            spriteBatch.Draw(texture, rect, Game1.getAvailableColors()[Game1.getSecondaryColor()]);
         }
 
 
 
-        public void setColor(Color color) {
-            this.color = color;
+        public void setColor(Game1.okColors colorEnum) {
+            this.colorEnum = colorEnum;
         }
-        public Color getColor() {
-            return color;
+        public Game1.okColors getColor() {
+            return colorEnum;
         }
         public void setDimensions(Rectangle dimensions) {
             this.dimensions =  new AABB(dimensions);
@@ -151,15 +202,30 @@ namespace Canvas_theGame.src
             this.dimensions.alterPositionAdition(position);
         }
         public void alterVelocityAdition(Vector2 _velocity) {
-            if (Math.Abs((this.velocity + _velocity).X) <= maxVelocity.X)
+            if (Math.Abs((this.velocity + _velocity).X) < maxVelocity.X)
+            {
                 this.velocity.X += _velocity.X;
+            }
             else
+            {
                 this.velocity.X = maxVelocity.X * ((this.velocity + _velocity).X > 0 ? 1 : -1);
+            }
 
-            if (Math.Abs((this.velocity + _velocity).Y) <= maxVelocity.Y)
-                this.velocity.Y += _velocity.Y;
+            if ((this.velocity + _velocity).Y > 0)
+            { //Falling
+                if (Math.Abs((this.velocity + _velocity).Y) < maxVelocity.Y)
+                {
+                    this.velocity.Y += _velocity.Y;
+                }
+                else
+                {
+                    this.velocity.Y = maxVelocity.Y * ((this.velocity + _velocity).Y > 0 ? 1 : -1);
+                }
+            }
             else
-                this.velocity.Y = maxVelocity.Y * ((this.velocity + _velocity).Y > 0 ? 1 : -1);
+            {
+                this.velocity.Y += _velocity.Y;
+            }
         }
         public void alterVelocityMultiplication(Vector2 _velocity) {
             this.velocity *= _velocity;

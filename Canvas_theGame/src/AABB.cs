@@ -36,7 +36,7 @@ namespace Canvas_theGame.src
             boundingBox = new Rectangle(new Point((int)position.X, (int)position.Y), size);
         }
 
-
+        #region Get/Set
         public void setPosition(Vector2 newValue)
         {
             position = newValue;
@@ -60,8 +60,9 @@ namespace Canvas_theGame.src
             changeBoundingBox();
             return boundingBox;
         }
+        #endregion
 
-
+        #region IntersectionLogic
         public bool Intersects(AABB targetAABB)
         {
             changeBoundingBox();
@@ -96,7 +97,7 @@ namespace Canvas_theGame.src
             if (this.Intersects(targetAABB)) {
                 Rectangle rect = Rectangle.Intersect(this.getBoundingBox(), targetAABB.getBoundingBox());
                 if (targetAABB.getBoundingBox().Top == rect.Top) {
-                    if (rect.Height < rect.Width) {
+                    if (rect.Height <= rect.Width) { //Used <= in order to prevent a colision fail when Heigh == Width
                         return true;
                     }
                 }
@@ -108,12 +109,13 @@ namespace Canvas_theGame.src
             if (this.Intersects(targetAABB)) {
                 Rectangle rect = Rectangle.Intersect(this.getBoundingBox(), targetAABB.getBoundingBox());
                 if (targetAABB.getBoundingBox().Bottom == rect.Bottom) {
-                    if (rect.Height < rect.Width) {
+                    if (rect.Height <= rect.Width) { //Used <= in order to prevent a colision fail when Heigh == Width 
                         return true;
                     }
                 }
             }
             return false;
         }
+        #endregion
     }
 }

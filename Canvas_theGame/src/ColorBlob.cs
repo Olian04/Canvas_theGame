@@ -11,7 +11,6 @@ namespace Canvas_theGame.src
 {
     class ColorBlob
     {
-        private Color color;
         private AABB dimensions;
         private static Texture2D texture;
         private Game1.okColors colorEnum;
@@ -21,10 +20,9 @@ namespace Canvas_theGame.src
             texture = Content.Load<Texture2D>("circle.png");
         }
 
-        public ColorBlob(Rectangle dimensions, Color color, Game1.okColors colorEnum)
+        public ColorBlob(Rectangle dimensions, Game1.okColors colorEnum)
         {
             this.dimensions = new AABB(dimensions);
-            this.color = color;
             this.colorEnum = colorEnum;
         }
 
@@ -36,15 +34,10 @@ namespace Canvas_theGame.src
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, dimensions.getBoundingBox(), color);
+            spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
         }
 
-
-        public Color getColor()
-        {
-            return color;
-        }
-        public Game1.okColors getColorEnum() {
+        public Game1.okColors getColor() {
             return colorEnum;
         }
         public AABB getDimensions()
