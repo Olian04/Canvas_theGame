@@ -12,14 +12,15 @@ namespace Canvas_theGame.src
 {
     class Player
     {
-        private Game1.okColors colorEnum;
+        #region Values
+        private Game1.okColors outerColorEnum, innerColorEnum;
         private AABB dimensions;
+        private Rectangle innerRectangle;
         private Texture2D texture;
-        private Vector2 velocity;
-        private Vector2 maxVelocity;
-        private float jumpStrength;
-        private float deceleration, verticalSpeedGround, verticalSpeedAir;
-        private bool onGround, doPulse;
+        private Vector2 velocity, maxVelocity;
+        private float jumpStrength, deceleration, verticalSpeedGround, verticalSpeedAir;
+        private bool onGround;
+        private int innerBorder;
 
         public void Init(ContentManager Content) {
             texture = Content.Load<Texture2D>("square.png");
@@ -29,14 +30,16 @@ namespace Canvas_theGame.src
             verticalSpeedGround = 0.5f;
             verticalSpeedAir = 0.25f;
             jumpStrength = 17;
+            innerBorder = 5;
             onGround = false;
-            doPulse = false;
         }
+        #endregion
 
-        public Player(Rectangle dimensions, Game1.okColors colorEnum)
+        public Player(Rectangle dimensions, Game1.okColors outerColorEnum, Game1.okColors innerColorEnum)
         {
             this.dimensions = new AABB(dimensions);
-            this.colorEnum = colorEnum;
+            this.outerColorEnum = outerColorEnum;
+            this.innerColorEnum = innerColorEnum;
         }
 
         public void Update(List<Barrier> barriers, KeyboardState ks, KeyboardState oldks)
@@ -47,7 +50,18 @@ namespace Canvas_theGame.src
             
             updateColission(barriers);
 
+            updateInnerRectangel();
+
             Level.Update(dimensions);
+        }
+
+        #region Sub Updates
+        private void updateInnerRectangel() {
+            this.innerRectangle = this.dimensions.getBoundingBox();
+            innerRectangle.X += innerBorder;
+            innerRectangle.Y += innerBorder;
+            innerRectangle.Width -= innerBorder * 2;
+            innerRectangle.Height -= innerBorder * 2;
         }
 
         private void updateColission(List<Barrier> barriers) {
@@ -81,7 +95,6 @@ namespace Canvas_theGame.src
         }
 
         private void updateInput(KeyboardState ks, KeyboardState oldks) {
-            doPulse = false;
             if (onGround)
             {
                 if (ks.IsKeyDown(Keys.Right))
@@ -111,7 +124,6 @@ namespace Canvas_theGame.src
             }
             if (ks.IsKeyDown(Keys.Down))
             {
-                doPulse = true;
                 //alterPositionAdition(new Point(0,3)); //for debug
             }
         }
@@ -161,26 +173,28 @@ namespace Canvas_theGame.src
 
             alterPositionAdition(velocity);
         }
+        #endregion
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
-            Rectangle rect = dimensions.getBoundingBox();
-            int border = 5;
-            rect.X += border;
-            rect.Y += border;
-            rect.Width -= border * 2;
-            rect.Height -= border * 2;
-            spriteBatch.Draw(texture, rect, Game1.getAvailableColors()[Game1.getSecondaryColor()]);
+            spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[outerColorEnum]);
+            spriteBatch.Draw(texture, innerRectangle, Game1.getAvailableColors()[innerColorEnum]);
         }
 
-
-
-        public void setColor(Game1.okColors colorEnum) {
-            this.colorEnum = colorEnum;
+        #region set/get
+        public void setOuterColor(Game1.okColors colorEnum) {
+            this.outerColorEnum = colorEnum;
         }
-        public Game1.okColors getColor() {
-            return colorEnum;
+        public Game1.okColors getOuterColor() {
+            return outerColorEnum;
+        }
+        public void setInnerColor(Game1.okColors colorEnum)
+        {
+            this.innerColorEnum = colorEnum;
+        }
+        public Game1.okColors getInnerColor()
+        {
+            return innerColorEnum;
         }
         public void setDimensions(Rectangle dimensions) {
             this.dimensions =  new AABB(dimensions);
@@ -191,6 +205,9 @@ namespace Canvas_theGame.src
         public AABB getDimensions() {
             return dimensions;
         }
+        #endregion
+
+        #region Alter pos/veloc
         public void alterPositionAdition(Vector2 position) {
             this.dimensions.alterPositionAdition(position);
         }
@@ -223,5 +240,6 @@ namespace Canvas_theGame.src
         public void alterVelocityMultiplication(Vector2 _velocity) {
             this.velocity *= _velocity;
         }
+        #endregion
     }
 }

@@ -28,7 +28,7 @@ namespace Canvas_theGame
             availableColors.Add(okColors.ORANGE, Color.Orange);
         }
 
-        static okColors primraryColor, secondaryColor;
+        static okColors primraryColor, secondaryColor, backgroundColor;
 
         private static Player player;
         Point playerSize;
@@ -58,6 +58,9 @@ namespace Canvas_theGame
         public static okColors getSecondaryColor() {
             return secondaryColor;
         }
+        public static okColors getBackgroundColor() {
+            return backgroundColor;
+        }
 
         public static float getGravity() {
             return gravity;
@@ -79,7 +82,7 @@ namespace Canvas_theGame
 
             playerSize = new Point(15, 25);
             currentLevel = Level.levels.DEMO1;
-            player = new Player(new Rectangle(new Point(/* Empty point; start pos is set in resetLevel. */), playerSize), primraryColor);
+            player = new Player(new Rectangle(new Point(/* Empty point; start pos is set in resetLevel. */), playerSize), primraryColor, secondaryColor);
 
             resetLevel();
 
@@ -117,12 +120,13 @@ namespace Canvas_theGame
 
             if (ks.IsKeyDown(Keys.Space) && !oldks.IsKeyDown(Keys.Space)) {
                 okColors holder = primraryColor;
-                primraryColor = secondaryColor;
-                secondaryColor = holder;
+                primraryColor = backgroundColor;
+                backgroundColor = holder;
             }
 
-            if (player.getColor() != primraryColor) {
-                player.setColor(primraryColor);
+            if (player.getOuterColor() != primraryColor || player.getInnerColor() != secondaryColor) {
+                player.setOuterColor(primraryColor);
+                player.setInnerColor(secondaryColor);
             }
             player.Update(Level.getBarriers(), ks, oldks);
 
@@ -161,6 +165,7 @@ namespace Canvas_theGame
             player.setPosition(Level.getStartPos());
             primraryColor = Level.getOriginalPrimraryColor();
             secondaryColor = Level.getOriginalSecondaryColor();
+            backgroundColor = Level.getOriginalBackgroundColor();
         }
 
         /// <summary>
@@ -169,10 +174,10 @@ namespace Canvas_theGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (secondaryColor != okColors.BLACK)
-                GraphicsDevice.Clear(Color.Lerp(availableColors[secondaryColor], Color.Black, 0.1f));
+            if (backgroundColor != okColors.BLACK)
+                GraphicsDevice.Clear(Color.Lerp(availableColors[backgroundColor], Color.Black, 0.1f));
             else
-                GraphicsDevice.Clear(Color.Lerp(availableColors[secondaryColor], Color.White, 0.1f));
+                GraphicsDevice.Clear(Color.Lerp(availableColors[backgroundColor], Color.White, 0.1f));
 
 
             spriteBatch.Begin();

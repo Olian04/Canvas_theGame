@@ -1,12 +1,12 @@
-﻿\This is a comment.
-\ c starts the definision of a new color, color 1, color 2 etc.
-\ : means "define as".
-\ 0 is already defined as blank.
-\ ! is already defined as spawn.
-\ ? is already defined as goal.
-\ = defines the end of the definision phase.
-c:-
-c:+
+﻿\ : means "define as".
+\ \ is already defined as lineBreak. lineBreak can not be redefined.
+blank:0
+mainColor:-
+backgroundColor:+
+spawn:!
+goal:?
+endDefine:=   
+newLayer:|
 =
 \					  FIRST LAYER											  SECOND LAYER
 \123456789|123456789|123456789|123456789|123456789|1234   123456789|123456789|123456789|123456789|123456789|1234

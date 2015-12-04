@@ -34,8 +34,6 @@ namespace Canvas_theGame.src
             }
         }
 
-
-
         public Game1.okColors getColor()
         {
             return colorEnum;

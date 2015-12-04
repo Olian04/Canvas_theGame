@@ -12,9 +12,12 @@ namespace Canvas_theGame.src
 {
     class Level
     {
-        public enum levels {DEMO1, DEMO2};
+        #region Values
+        public enum levels { DEMO1, DEMO2 };
 
-        private static Game1.okColors originalPrimraryColor, originalSecondaryColor;
+        private static Game1.okColors originalPrimraryColor, originalBackgroundColor, originalSecondaryColor;
+        private Dictionary<Game1.okColors, Color> availableColors;
+        private Dictionary<string, Char> markers;
         private static Vector2 startPos;
         private static List<Barrier> barriers;
         private static List<ColorBlob> colorBlobs;
@@ -25,19 +28,51 @@ namespace Canvas_theGame.src
         private static levels nextLevel;
 
         private int blockWidth = 20;
+        #endregion
+
+        #region get/set
+        public static Vector2 getStartPos()
+        {
+            return startPos;
+        }
+        public static List<Barrier> getBarriers()
+        {
+            return barriers;
+        }
+        public static List<ColorBlob> getColorBlobs()
+        {
+            return colorBlobs;
+        }
+        public static void removeFromColorBlobs(ColorBlob colorBlobToRemove)
+        {
+            colorBlobs.Remove(colorBlobToRemove);
+        }
+        public static Game1.okColors getOriginalPrimraryColor()
+        {
+            return originalPrimraryColor;
+        }
+        public static Game1.okColors getOriginalSecondaryColor()
+        {
+            return originalSecondaryColor;
+        }
+        public static Game1.okColors getOriginalBackgroundColor()
+        {
+            return originalBackgroundColor;
+        }
+        #endregion
+
+        public static void Update(AABB player)
+        {
+            if (player.Intersects(levelEnding))
+            {
+                loadLevel(nextLevel);
+            }
+        }
 
         public static void loadLevel(levels levelToLoad) {
             new Level(levelToLoad);
             Game1.resetLevelStatic();
         }
-
-        public static void Update(AABB player) {
-            if (player.Intersects(levelEnding)) {
-                loadLevel(nextLevel);
-            }
-        }
-
-        private Dictionary<Game1.okColors, Color> availableColors;
         private Level(levels levelToLoad) {
             availableColors = Game1.getAvailableColors();
             barriers = new List<Barrier>();
@@ -52,44 +87,75 @@ namespace Canvas_theGame.src
                     break;
             }
         }
-        public static Vector2 getStartPos() {
-            return startPos;
+
+        private void initMarkers() {
+            markers = new Dictionary<string, char>();
+            markers.Add("blank", '0');
+            markers.Add("mainColor", '-');
+            markers.Add("backgroundColor", '+');
+            markers.Add("spawn", '!');
+            markers.Add("goal", '?');
+            markers.Add("endDefine", '=');   
+            markers.Add("newLayer", '|');
         }
-        public static List<Barrier> getBarriers() {
-            return barriers;
+
+        #region Dynamic Load
+        private void loadDEMO1()
+        {
+            originalPrimraryColor = Game1.okColors.BLACK;
+            originalSecondaryColor = Game1.okColors.ORANGE;
+            originalBackgroundColor = Game1.okColors.WHITE;
+            loadFromFile("DEMO1");
+            nextLevel = levels.DEMO2;
         }
-        public static List<ColorBlob> getColorBlobs() {
-            return colorBlobs;
-        }
-        public static void removeFromColorBlobs(ColorBlob colorBlobToRemove) {
-            colorBlobs.Remove(colorBlobToRemove);
-        }
-        public static Game1.okColors getOriginalPrimraryColor() {
-            return originalPrimraryColor;
-        }
-        public static Game1.okColors getOriginalSecondaryColor() {
-            return originalSecondaryColor;
+        private void loadDEMO2()
+        {
+            originalPrimraryColor = Game1.okColors.BLACK;
+            originalSecondaryColor = Game1.okColors.ORANGE;
+            originalBackgroundColor = Game1.okColors.WHITE;
+            loadFromFile("DEMO2");
+            nextLevel = levels.DEMO1;
         }
 
         private void loadFromFile(string fileName) {
             streamReader = new StreamReader("Content/level_" + fileName + ".txt");
 
-            List<Char> colorRepresentations = new List<char>();
+            initMarkers();
 
             #region DefinePhase
             while (!streamReader.EndOfStream) { //Define phase.
                 string holder = streamReader.ReadLine();
-
-                if (holder[0] == '\\') {
+                if (holder[0] == '\\' || holder.Length < 1) { //Skip Empty Lines
                     continue;
                 }
-                else if (holder[0] == 'c') { //c = color.
-                    try {
-                        colorRepresentations.Add(holder[2]);
-                    } catch (IndexOutOfRangeException e) { e.ToString(); }
-                }
-                else if (holder[0] == '=') {
+                else if (holder[0] == markers["endDefine"]) {
                     break;
+                }
+                else {
+                    string substring = holder.Substring(0, holder.IndexOf(':'));
+                    if (substring == "blank") {
+                        markers["blank"] = holder[holder.Length - 1];
+                    }
+                    else if (substring == "mainColor")
+                    {
+                        markers["mainColor"] = holder[holder.Length - 1];
+                    }
+                    else if (substring == "backgroundColor")
+                    {
+                        markers["backgroundColor"] = holder[holder.Length - 1];
+                    }
+                    else if (substring == "spawn")
+                    {
+                        markers["spawn"] = holder[holder.Length - 1];
+                    }
+                    else if (substring == "goal")
+                    {
+                        markers["goal"] = holder[holder.Length - 1];
+                    }
+                    else if (substring == "newLayer")
+                    {
+                        markers["newLayer"] = holder[holder.Length - 1];
+                    }
                 }
             }
             #endregion
@@ -101,36 +167,35 @@ namespace Canvas_theGame.src
                 j++;
                 k = 0;
                 for (int i = 0; i < holder.Length; i++, k++) {
-                    if (holder[i] == '0')
+                    if (holder[i] == '\\' || holder.Length < 1){ //Skip Empty Lines
+                        break;
+                    }
+                    else if (holder[i] == markers["blank"])
                     {
                         continue;
                     }
-                    else if (holder[i] == ' ')
-                    {
-                        k--;
-                    }
-                    else if (holder[i] == '\\')
-                    {
-                        break;
-                    }
-                    else if (holder[i] == '|') {
+                    else if (holder[i] == markers["newLayer"]) {
                         k = -1;
                     }
-                    else if (holder[i] == '!')
+                    else if (holder[i] == markers["spawn"])
                     {
                         startPos = new Vector2((blockWidth * k), blockWidth * j);
                     }
-                    else if (holder[i] == '?')
+                    else if (holder[i] == markers["goal"])
                     {
                         levelEnding = new AABB(new Rectangle(blockWidth * k, blockWidth * j, 20, 20));
                     }
-                    else if (holder[i] == colorRepresentations[0])
+                    else if (holder[i] == markers["mainColor"])
                     { //FirstColor
                         barriers.Add(new Barrier(new Rectangle(blockWidth * (k), blockWidth * (j), 20, 20), originalPrimraryColor));
                     }
-                    else if (holder[i] == colorRepresentations[1])
-                    { //SeccondColor
-                        barriers.Add(new Barrier(new Rectangle(blockWidth * (k), blockWidth * (j), 20, 20), originalSecondaryColor));
+                    else if (holder[i] == markers["backgroundColor"])
+                    { //BackgroundColor
+                        barriers.Add(new Barrier(new Rectangle(blockWidth * (k), blockWidth * (j), 20, 20), originalBackgroundColor));
+                    }
+                    else //Undefined characters in the wrong places.
+                    {
+                        k--;
                     }
                 }
             }
@@ -138,23 +203,12 @@ namespace Canvas_theGame.src
 
             streamReader.Close();
         }
+        #endregion
 
-        private void loadDEMO1() {
-            originalPrimraryColor = Game1.okColors.BLACK;
-            originalSecondaryColor = Game1.okColors.WHITE;
-            loadFromFile("DEMO1");
-            nextLevel = levels.DEMO2;
-        }
-        private void loadDEMO2() {
-            originalPrimraryColor = Game1.okColors.BLACK;
-            originalSecondaryColor = Game1.okColors.WHITE;
-            loadFromFile("DEMO2");
-            nextLevel = levels.DEMO1;
-        }
-
+        #region Static Load (OLD)
         private void loadDEMO() {
             originalPrimraryColor = Game1.okColors.BLACK;
-            originalSecondaryColor = Game1.okColors.WHITE;
+            originalBackgroundColor = Game1.okColors.WHITE;
             startPos = new Vector2(350 - 7, 250); //7 = half player width.
 
             barriers.Add(new Barrier(new Rectangle(new Point(300, 300), new Point(100, blockWidth)), Game1.okColors.BLACK)); //Floor
@@ -174,7 +228,7 @@ namespace Canvas_theGame.src
 
             barriers.Add(new Barrier(new Rectangle(new Point(500, 400), new Point(100, blockWidth)), Game1.okColors.BLACK)); //Black help line
             // olorBlobs.Add(new ColorBlob(new Rectangle(new Point(540, 370), new Point(20, 20)), Game1.okColors.ORANGE)); //Middle orange blob
-
         }
+        #endregion
     }
 }
