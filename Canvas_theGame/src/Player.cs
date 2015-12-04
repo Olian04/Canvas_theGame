@@ -48,13 +48,6 @@ namespace Canvas_theGame.src
             updateColission(barriers);
 
             Level.Update(dimensions);
-
-            if (doPulse) {
-                foreach (Barrier b in barriers) {
-                    b.pulseVisable();
-                }
-            }
-
         }
 
         private void updateColission(List<Barrier> barriers) {

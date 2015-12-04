@@ -14,7 +14,6 @@ namespace Canvas_theGame.src
         private Game1.okColors colorEnum;
         private AABB dimensions;
         private static Texture2D texture;
-        private float visablePulse;
 
         public static void Init(ContentManager Content) {
             texture = Content.Load<Texture2D>("square.png");
@@ -26,26 +25,12 @@ namespace Canvas_theGame.src
         }
 
         public void Update() {
-
-            if (visablePulse < 0.01f)
-                visablePulse = 0;
-            else
-                visablePulse -= 0.01f;
-                
-        }
-
-        public void pulseVisable() {
-            visablePulse = 1;
         }
 
         public void Draw(SpriteBatch spriteBatch) {
             if (this.getColor() == Game1.getPrimraryColor())
             {
                 spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
-            }
-            else if (visablePulse > 0)
-            {
-                spriteBatch.Draw(texture, dimensions.getBoundingBox(), Color.Lerp(Color.TransparentBlack, Game1.getAvailableColors()[colorEnum], visablePulse));
             }
         }
 
