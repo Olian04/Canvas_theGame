@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace Canvas_theGame.src
+namespace Canvas_theGame.src.Items
 {
-    class ColorBlob
+    class ColorBlob : src.Interfaces.Item
     {
         private AABB dimensions;
         private static Texture2D texture;
@@ -26,10 +26,8 @@ namespace Canvas_theGame.src
             this.colorEnum = colorEnum;
         }
 
-
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -44,5 +42,6 @@ namespace Canvas_theGame.src
         {
             return dimensions;
         }
+
     }
 }

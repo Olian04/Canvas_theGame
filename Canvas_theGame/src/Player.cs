@@ -8,30 +8,34 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
+using Canvas_theGame.src.Items;
+
 namespace Canvas_theGame.src
 {
     class Player
     {
         #region Values
+        private static float jumpStrength, deceleration, verticalSpeedGround, verticalSpeedAir, gravity;
+        private static Texture2D texture;
+        private static Vector2 maxVelocity;
+
         private Game1.okColors outerColorEnum, innerColorEnum;
         private AABB dimensions;
         private Rectangle innerRectangle;
-        private Texture2D texture;
-        private Vector2 velocity, maxVelocity;
-        private float jumpStrength, deceleration, verticalSpeedGround, verticalSpeedAir;
         private bool onGround;
-        private int innerBorder;
+        private Vector2 velocity;
+        private static int innerBorder;
 
-        public void Init(ContentManager Content) {
+
+        public static void Init(ContentManager Content) {
             texture = Content.Load<Texture2D>("square.png");
-            velocity = new Vector2(0);
             maxVelocity = new Vector2(7, 10); //X=horizontal, Y=vertical.
             deceleration = 2;
             verticalSpeedGround = 0.5f;
             verticalSpeedAir = 0.25f;
             jumpStrength = 17;
             innerBorder = 5;
-            onGround = false;
+            gravity = 1;
         }
         #endregion
 
@@ -40,6 +44,8 @@ namespace Canvas_theGame.src
             this.dimensions = new AABB(dimensions);
             this.outerColorEnum = outerColorEnum;
             this.innerColorEnum = innerColorEnum;
+            velocity = new Vector2(0);
+            onGround = false;
         }
 
         public void Update(List<Barrier> barriers, KeyboardState ks, KeyboardState oldks)
@@ -51,8 +57,6 @@ namespace Canvas_theGame.src
             updateColission(barriers);
 
             updateInnerRectangel();
-
-            Level.Update(dimensions);
         }
 
         #region Sub Updates
@@ -168,7 +172,7 @@ namespace Canvas_theGame.src
 
             if (velocity.Y < maxVelocity.Y)
             {
-                alterVelocityAdition(new Vector2(0, Game1.getGravity()));
+                alterVelocityAdition(new Vector2(0, gravity) );
             }
 
             alterPositionAdition(velocity);
@@ -204,6 +208,14 @@ namespace Canvas_theGame.src
         }
         public AABB getDimensions() {
             return dimensions;
+        }
+        public float getGravity()
+        {
+            return gravity;
+        }
+        public void setGravity(float _gravity)
+        {
+            gravity = _gravity;
         }
         #endregion
 

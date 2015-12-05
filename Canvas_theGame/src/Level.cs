@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 using Microsoft.Xna.Framework;
 
 using Canvas_theGame;
-using System.IO;
+using Canvas_theGame.src.Items;
 
 namespace Canvas_theGame.src
 {
@@ -71,7 +72,7 @@ namespace Canvas_theGame.src
 
         public static void loadLevel(levels levelToLoad) {
             new Level(levelToLoad);
-            Game1.resetLevelStatic();
+            GameModes.StoryMode.resetLevelStatic();
         }
         private Level(levels levelToLoad) {
             availableColors = Game1.getAvailableColors();
@@ -206,29 +207,30 @@ namespace Canvas_theGame.src
         #endregion
 
         #region Static Load (OLD)
+        /*
         private void loadDEMO() {
-            originalPrimraryColor = Game1.okColors.BLACK;
-            originalBackgroundColor = Game1.okColors.WHITE;
+            originalPrimraryColor = GameModes.StoryMode.okColors.BLACK;
+            originalBackgroundColor = GameModes.StoryMode.okColors.WHITE;
             startPos = new Vector2(350 - 7, 250); //7 = half player width.
 
-            barriers.Add(new Barrier(new Rectangle(new Point(300, 300), new Point(100, blockWidth)), Game1.okColors.BLACK)); //Floor
-            barriers.Add(new Barrier(new Rectangle(new Point(300, 200), new Point(100, blockWidth)), Game1.okColors.BLACK)); //Roof
-            barriers.Add(new Barrier(new Rectangle(new Point(280, 200), new Point(blockWidth, 120)), Game1.okColors.BLACK)); //Left wall
-            barriers.Add(new Barrier(new Rectangle(new Point(380, 200), new Point(blockWidth, 120)), Game1.okColors.BLACK)); //Right wall
+            barriers.Add(new Barrier(new Rectangle(new Point(300, 300), new Point(100, blockWidth)), GameModes.StoryMode.okColors.BLACK)); //Floor
+            barriers.Add(new Barrier(new Rectangle(new Point(300, 200), new Point(100, blockWidth)), GameModes.StoryMode.okColors.BLACK)); //Roof
+            barriers.Add(new Barrier(new Rectangle(new Point(280, 200), new Point(blockWidth, 120)), GameModes.StoryMode.okColors.BLACK)); //Left wall
+            barriers.Add(new Barrier(new Rectangle(new Point(380, 200), new Point(blockWidth, 120)), GameModes.StoryMode.okColors.BLACK)); //Right wall
 
-            barriers.Add(new Barrier(new Rectangle(new Point(700, 300), new Point(100, blockWidth)), Game1.okColors.WHITE)); //White end floor
-            /* colorBlobs.Add(new ColorBlob(new Rectangle(new Point(730, 250), new Point(20, 20)), Game1.okColors.WHITE)); //Ending white blob
+            barriers.Add(new Barrier(new Rectangle(new Point(700, 300), new Point(100, blockWidth)), GameModes.StoryMode.okColors.WHITE)); //White end floor
+            colorBlobs.Add(new ColorBlob(new Rectangle(new Point(730, 250), new Point(20, 20)), Game1.okColors.WHITE)); //Ending white blob
             barriers.Add(new Barrier(new Rectangle(new Point(700, 200), new Point(100, blockWidth)), Game1.okColors.ORANGE)); //Roof
             barriers.Add(new Barrier(new Rectangle(new Point(680, 200), new Point(blockWidth, 320)), Game1.okColors.ORANGE)); //Left wall
             barriers.Add(new Barrier(new Rectangle(new Point(800, 200), new Point(blockWidth, 200)), Game1.okColors.ORANGE)); //Right wall
-            */
-            barriers.Add(new Barrier(new Rectangle(new Point(300, 600), new Point(500, blockWidth)), Game1.okColors.WHITE)); //Bottom Line
+            barriers.Add(new Barrier(new Rectangle(new Point(300, 600), new Point(500, blockWidth)), GameModes.StoryMode.okColors.WHITE)); //Bottom Line
 
-            barriers.Add(new Barrier(new Rectangle(new Point(500, 500), new Point(100, blockWidth)), Game1.okColors.WHITE)); //White help line
+            barriers.Add(new Barrier(new Rectangle(new Point(500, 500), new Point(100, blockWidth)), GameModes.StoryMode.okColors.WHITE)); //White help line
 
-            barriers.Add(new Barrier(new Rectangle(new Point(500, 400), new Point(100, blockWidth)), Game1.okColors.BLACK)); //Black help line
+            barriers.Add(new Barrier(new Rectangle(new Point(500, 400), new Point(100, blockWidth)), GameModes.StoryMode.okColors.BLACK)); //Black help line
             // olorBlobs.Add(new ColorBlob(new Rectangle(new Point(540, 370), new Point(20, 20)), Game1.okColors.ORANGE)); //Middle orange blob
         }
+        */
         #endregion
     }
 }

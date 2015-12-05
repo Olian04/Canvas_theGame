@@ -42,8 +42,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\AABB.cs" />
-    <Compile Include="src\Barrier.cs" />
-    <Compile Include="src\ColorBlob.cs" />
+    <Compile Include="src\GameModes\EndlessRunner.cs" />
+    <Compile Include="src\GameModes\MainMenu.cs" />
+    <Compile Include="src\Items\Barrier.cs" />
+    <Compile Include="src\Items\ColorBlob.cs" />
+    <Compile Include="src\GameModes\StoryMode.cs" />
+    <Compile Include="src\Interfaces\GameMode.cs" />
+    <Compile Include="src\Interfaces\Item.cs" />
     <Compile Include="src\Level.cs" />
     <Compile Include="src\Player.cs" />
   </ItemGroup>
@@ -56,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\circle.png">
@@ -70,10 +76,22 @@
     <Content Include="Content\square.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\text\text_ENDLESSJUMP.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\text\text_ENDLESSRUN.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\text\text_STORY.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\General\" />
   </ItemGroup>
   <!-- Specify the search path explicitly so the ResolveAssemblyReferences task picks the right ones -->
   <Target Name="BeforeResolveReferences">

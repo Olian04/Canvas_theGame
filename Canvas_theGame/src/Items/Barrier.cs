@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace Canvas_theGame.src
+namespace Canvas_theGame.src.Items
 {
-    class Barrier
+    class Barrier : src.Interfaces.Item
     {
         private Game1.okColors colorEnum;
         private AABB dimensions;
@@ -24,15 +24,17 @@ namespace Canvas_theGame.src
             this.colorEnum = colorEnum;
         }
 
-        public void Update() {
+        public void Update(GameTime gameTime)
+        {
         }
 
         public void Draw(SpriteBatch spriteBatch) {
-            if (this.getColor() == Game1.getPrimraryColor())
+            if (this.getColor() == Game1.getPrimraryColor() )
             {
                 spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
             }
         }
+
 
         public Game1.okColors getColor()
         {
@@ -42,5 +44,6 @@ namespace Canvas_theGame.src
         {
             return dimensions;
         }
+
     }
 }
