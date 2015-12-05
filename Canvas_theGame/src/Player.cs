@@ -16,6 +16,7 @@ namespace Canvas_theGame.src
     {
         #region Values
         private static float jumpStrength, deceleration, verticalSpeedGround, verticalSpeedAir, gravity;
+        private static int innerBorder;
         private static Texture2D texture;
         private static Vector2 maxVelocity;
 
@@ -24,7 +25,8 @@ namespace Canvas_theGame.src
         private Rectangle innerRectangle;
         private bool onGround;
         private Vector2 velocity;
-        private static int innerBorder;
+        private bool allowMovement, allowJump;
+        #endregion
 
 
         public static void Init(ContentManager Content) {
@@ -37,15 +39,16 @@ namespace Canvas_theGame.src
             innerBorder = 5;
             gravity = 1;
         }
-        #endregion
 
-        public Player(Rectangle dimensions, Game1.okColors outerColorEnum, Game1.okColors innerColorEnum)
+        public Player(Rectangle dimensions, Game1.okColors outerColorEnum, Game1.okColors innerColorEnum, bool allowMovement = true, bool allowJump = true)
         {
             this.dimensions = new AABB(dimensions);
             this.outerColorEnum = outerColorEnum;
             this.innerColorEnum = innerColorEnum;
-            velocity = new Vector2(0);
-            onGround = false;
+            this.allowMovement = allowMovement;
+            this.allowJump = allowJump;
+            this.velocity = new Vector2(0);
+            this.onGround = false;
         }
 
         public void Update(List<Barrier> barriers, KeyboardState ks, KeyboardState oldks)
@@ -71,7 +74,7 @@ namespace Canvas_theGame.src
         private void updateColission(List<Barrier> barriers) {
             onGround = false;
             foreach (Barrier b in barriers) {
-                if (Game1.getPrimraryColor() == b.getColor()) {
+                if (b.getColor() != Game1.getBackgroundColor() ) {
                     if (dimensions.isAbove(b.getDimensions()))
                     {
                         dimensions.setPositionY(b.getDimensions().getBoundingBox().Top - dimensions.getBoundingBox().Height);
@@ -99,36 +102,58 @@ namespace Canvas_theGame.src
         }
 
         private void updateInput(KeyboardState ks, KeyboardState oldks) {
-            if (onGround)
+            if (allowMovement)
             {
-                if (ks.IsKeyDown(Keys.Right))
+                if (onGround)
                 {
-                    alterVelocityAdition(new Vector2(verticalSpeedGround + deceleration, 0));
+                    if (ks.IsKeyDown(Keys.Right))
+                    {
+                        alterVelocityAdition(new Vector2(verticalSpeedGround + deceleration, 0));
+                    }
+                    if (ks.IsKeyDown(Keys.Left))
+                    {
+                        alterVelocityAdition(new Vector2(-(verticalSpeedGround + deceleration), 0));
+                    }
                 }
-                if (ks.IsKeyDown(Keys.Left))
+                else
                 {
-                    alterVelocityAdition(new Vector2(-(verticalSpeedGround + deceleration), 0));
+                    if (ks.IsKeyDown(Keys.Right))
+                    {
+                        alterVelocityAdition(new Vector2(verticalSpeedAir + deceleration, 0));
+                    }
+                    if (ks.IsKeyDown(Keys.Left))
+                    {
+                        alterVelocityAdition(new Vector2(-(verticalSpeedAir + deceleration), 0));
+                    }
                 }
             }
-            else
+
+            if (allowJump)
             {
-                if (ks.IsKeyDown(Keys.Right))
+                if (onGround && ks.IsKeyDown(Keys.Up))
                 {
-                    alterVelocityAdition(new Vector2(verticalSpeedAir + deceleration, 0));
-                }
-                if (ks.IsKeyDown(Keys.Left))
-                {
-                    alterVelocityAdition(new Vector2(-(verticalSpeedAir + deceleration), 0));
+                    velocity.Y = -jumpStrength; //TODO: FIX THIS WORKAROUND!
+                    //alterPositionAdition(new Point(0,-3)); //for debug
                 }
             }
-            if (onGround && ks.IsKeyDown(Keys.Up))
-            {
-                velocity.Y = -jumpStrength; //TODO: FIX THIS WORKAROUND!
-                //alterPositionAdition(new Point(0,-3)); //for debug
-            }
+
             if (ks.IsKeyDown(Keys.Down))
             {
                 //alterPositionAdition(new Point(0,3)); //for debug
+            }
+
+            if (ks.IsKeyDown(Keys.X) && !oldks.IsKeyDown(Keys.X))
+            {
+                Game1.okColors holder = Game1.getSecondaryColor();
+                Game1.setSecondaryColor(Game1.getBackgroundColor());
+                Game1.setBackgroundColor(holder);
+            }
+
+            if (ks.IsKeyDown(Keys.Z) && !oldks.IsKeyDown(Keys.Z))
+            {
+                Game1.okColors holder = Game1.getPrimraryColor();
+                Game1.setPrimaryColor(Game1.getBackgroundColor());
+                Game1.setBackgroundColor(holder);
             }
         }
 

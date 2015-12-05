@@ -25,14 +25,16 @@ namespace Canvas_theGame
 
         private static src.Interfaces.GameMode currentGameMode = null;
 
-        public enum okColors { WHITE, BLACK, ORANGE, err };
+        public enum okColors { WHITE, BLACK, BLUE, ORANGE, GREY, err };
         private static Dictionary<okColors, Color> availableColors;
         private void InitOkColors()
         {
             availableColors = new Dictionary<okColors, Color>();
             availableColors.Add(okColors.WHITE, Color.White);
             availableColors.Add(okColors.BLACK, Color.Black);
-            availableColors.Add(okColors.ORANGE, Color.Orange);
+            availableColors.Add(okColors.BLUE, new Color(0, 110, 199));
+            availableColors.Add(okColors.ORANGE, new Color(247, 163, 10));
+            availableColors.Add(okColors.GREY, new Color(86, 90, 95));
         }
 
         private static okColors primraryColor, secondaryColor, backgroundColor;
@@ -51,6 +53,8 @@ namespace Canvas_theGame
 
         public static void changeGameMode(string gameMode)
         {
+            SetBaseColors();
+
             if (gameMode == "mainMenu")
             {
                 currentGameMode = new src.GameModes.MainMenu();
@@ -91,14 +95,16 @@ namespace Canvas_theGame
         protected override void Initialize()
         {
             Init();
-
-            primraryColor = okColors.err;
-            secondaryColor = okColors.err;
-            backgroundColor = okColors.err;
-
+            
             changeGameMode("mainMenu");
 
             base.Initialize();
+        }
+
+        private static void SetBaseColors() {
+            primraryColor = okColors.BLACK;
+            secondaryColor = okColors.ORANGE;
+            backgroundColor = okColors.WHITE;
         }
 
         /// <summary>
@@ -128,13 +134,7 @@ namespace Canvas_theGame
 
             if (currentGameMode != null) {
                 currentGameMode.Update(gameTime);
-                if (ks.IsKeyDown(Keys.Space) && !oldks.IsKeyDown(Keys.Space))
-                {
-                    Game1.okColors holder = Game1.getPrimraryColor();
-                    Game1.setPrimaryColor(Game1.getBackgroundColor());
-                    Game1.setBackgroundColor(holder);
-                }
-
+               
                 if (currentGameMode.getPlayer().getOuterColor() != Game1.getPrimraryColor() || currentGameMode.getPlayer().getInnerColor() != Game1.getSecondaryColor())
                 {
                     currentGameMode.getPlayer().setOuterColor(Game1.getPrimraryColor());

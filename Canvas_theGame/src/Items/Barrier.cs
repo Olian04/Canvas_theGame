@@ -29,7 +29,7 @@ namespace Canvas_theGame.src.Items
         }
 
         public void Draw(SpriteBatch spriteBatch) {
-            if (this.getColor() == Game1.getPrimraryColor() )
+            if (this.getColor() != Game1.getBackgroundColor() )
             {
                 spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
             }

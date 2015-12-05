@@ -20,20 +20,12 @@ namespace Canvas_theGame.src.GameModes
 
         public MainMenu()
         {
-            Game1.setPrimaryColor(Game1.okColors.BLACK);
-            Game1.setSecondaryColor(Game1.okColors.ORANGE);
-            Game1.setBackgroundColor(Game1.okColors.WHITE);
-
             barriers = new List<Items.Barrier>();
 
             endlessJumpButton = new AABB(new Rectangle(300, 400, 100, 100));
             storyButton = new AABB(new Rectangle(500, 400, 100, 100));
             endlessRunButton = new AABB(new Rectangle(700, 400, 100, 100));
             barriers.Add(new Items.Barrier(new Rectangle(100, 600, 900, 20), Game1.getPrimraryColor() ) );
-
-            Game1.setPrimaryColor(Game1.okColors.BLACK);
-            Game1.setSecondaryColor(Game1.okColors.ORANGE);
-            Game1.setBackgroundColor(Game1.okColors.WHITE);
 
             startPos = new Point(535, 550);
             Rectangle holder = new Rectangle(startPos, new Point(15, 25));
