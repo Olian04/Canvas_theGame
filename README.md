@@ -44,7 +44,7 @@ I knew i wanted the game to be 2D, and i quickly realized that i wanted it to be
 * 
 
 ####__Old Versions__
-* _version 1.0_
+_version 1.0_
 >__Theses__
 >A platforming puzzle game about playing with colors.
 >You (the player) consists of one color (the primary color).
