@@ -12,3 +12,17 @@ C:\Users\Oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theG
 C:\Users\Oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\text\text_ENDLESSJUMP.png
 C:\Users\Oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\text\text_ENDLESSRUN.png
 C:\Users\Oliver\documents\visual studio 2015\Projects\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\text\text_STORY.png
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\obj\x86\Debug\Canvas_theGame.exe
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\obj\x86\Debug\Canvas_theGame.pdb
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\circle.png
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\level_DEMO1.txt
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\level_DEMO2.txt
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\square.png
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\text\text_ENDLESSJUMP.png
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\text\text_ENDLESSRUN.png
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Content\text\text_STORY.png
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Canvas_theGame.exe
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\Canvas_theGame.pdb
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\MonoGame.Framework.dll
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\bin\WindowsGL\Debug\OpenTK.dll
+C:\Users\Oliver\Documents\GitHub\Canvas_theGame\Canvas_theGame\obj\x86\Debug\Canvas_theGame.csprojResolveAssemblyReference.cache
