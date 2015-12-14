@@ -30,9 +30,13 @@ namespace Canvas_theGame.src.Items
         {
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw1(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, dimensions.getBoundingBox(), Game1.getAvailableColors()[colorEnum]);
+        }
+
+        public void Draw2(SpriteBatch spriteBatch)
+        {
         }
 
         public Game1.okColors getColor() {

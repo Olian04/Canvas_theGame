@@ -13,7 +13,7 @@ using Canvas_theGame.src.Interfaces;
 
 namespace Canvas_theGame.src.GameModes
 {
-    class StoryMode : Interfaces.GameMode
+    public class StoryMode : Interfaces.GameMode
     {
         private static Player player;
         private static Point playerSize;
@@ -59,12 +59,17 @@ namespace Canvas_theGame.src.GameModes
 
             foreach (Barrier b in Level.getBarriers())
             {
-                b.Draw(spriteBatch);
+                b.Draw1(spriteBatch);
+            }
+
+            foreach (Barrier b in Level.getBarriers())
+            {
+                b.Draw2(spriteBatch);
             }
 
             foreach (ColorBlob c in Level.getColorBlobs())
             {
-                c.Draw(spriteBatch);
+                c.Draw1(spriteBatch);
             }
 
             spriteBatch.End();
@@ -88,6 +93,10 @@ namespace Canvas_theGame.src.GameModes
         public Player getPlayer()
         {
             return player;
+        }
+
+        public void addProjectile(Projectile projectile)
+        {
         }
     }
 }

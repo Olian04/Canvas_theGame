@@ -11,7 +11,7 @@ using Canvas_theGame.src.Items;
 
 namespace Canvas_theGame.src.GameModes
 {
-    class EndlessRunner : Interfaces.GameMode
+    public class EndlessRunner : Interfaces.GameMode
     {
         private static Player player;
         private static Point playerSize, startPos;
@@ -79,17 +79,25 @@ namespace Canvas_theGame.src.GameModes
 
             foreach (Barrier b in ground)
             {
-                b.Draw(spriteBatch);
+                b.Draw1(spriteBatch);
+            }
+            foreach (Barrier b in ground)
+            {
+                b.Draw2(spriteBatch);
             }
 
             foreach (Barrier b in barriers)
             {
-                b.Draw(spriteBatch);
+                b.Draw1(spriteBatch);
+            }
+            foreach (Barrier b in barriers)
+            {
+                b.Draw2(spriteBatch);
             }
 
             foreach (ColorBlob c in colorBlobs)
             {
-                c.Draw(spriteBatch);
+                c.Draw1(spriteBatch);
             }
 
             player.Draw(spriteBatch);
@@ -179,6 +187,10 @@ namespace Canvas_theGame.src.GameModes
         public Player getPlayer()
         {
             return player;
+        }
+
+        public void addProjectile(Projectile projectile)
+        {
         }
     }
 }

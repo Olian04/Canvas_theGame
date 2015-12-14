@@ -49,6 +49,7 @@
     <Compile Include="src\GameModes\StoryMode.cs" />
     <Compile Include="src\Interfaces\GameMode.cs" />
     <Compile Include="src\Interfaces\Item.cs" />
+    <Compile Include="src\Items\Projectile.cs" />
     <Compile Include="src\Level.cs" />
     <Compile Include="src\Player.cs" />
   </ItemGroup>
@@ -90,9 +91,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\General\" />
-  </ItemGroup>
+  <ItemGroup />
   <!-- Specify the search path explicitly so the ResolveAssemblyReferences task picks the right ones -->
   <Target Name="BeforeResolveReferences">
     <CreateProperty Value="$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows;$(AssemblySearchPaths)">

@@ -12,7 +12,7 @@ namespace Canvas_theGame.src
      * AABB = Axis Alined Bounding Box
      * (Rectangle hitbox)
      */
-    class AABB
+    public class AABB
     {
         private Rectangle boundingBox;
         private Vector2 position;

@@ -12,7 +12,7 @@ using Canvas_theGame.src.Items;
 
 namespace Canvas_theGame.src
 {
-    class Player
+    public class Player
     {
         #region Values
         private static float jumpStrength, deceleration, verticalSpeedGround, verticalSpeedAir, gravity;
@@ -23,6 +23,7 @@ namespace Canvas_theGame.src
         private Game1.okColors outerColorEnum, innerColorEnum;
         private AABB dimensions;
         private Rectangle innerRectangle;
+        private int innerColorPoolMissing, innerColorPoolMax;
         private bool onGround;
         private Vector2 velocity;
         private bool allowMovement, allowJump;
@@ -49,6 +50,12 @@ namespace Canvas_theGame.src
             this.allowJump = allowJump;
             this.velocity = new Vector2(0);
             this.onGround = false;
+            this.innerColorPoolMissing = 0;
+            this.innerColorPoolMax = 3;
+
+            this.innerRectangle = this.dimensions.getBoundingBox();
+            innerRectangle.Width -= innerBorder * 2;
+            innerRectangle.Height -= innerBorder * 2;
         }
 
         public void Update(List<Barrier> barriers, KeyboardState ks, KeyboardState oldks)
@@ -64,11 +71,8 @@ namespace Canvas_theGame.src
 
         #region Sub Updates
         private void updateInnerRectangel() {
-            this.innerRectangle = this.dimensions.getBoundingBox();
-            innerRectangle.X += innerBorder;
-            innerRectangle.Y += innerBorder;
-            innerRectangle.Width -= innerBorder * 2;
-            innerRectangle.Height -= innerBorder * 2;
+            innerRectangle.X = this.dimensions.getBoundingBox().X + innerBorder;
+            innerRectangle.Y = this.dimensions.getBoundingBox().Y + innerBorder;
         }
 
         private void updateColission(List<Barrier> barriers) {
@@ -144,9 +148,13 @@ namespace Canvas_theGame.src
 
             if (ks.IsKeyDown(Keys.X) && !oldks.IsKeyDown(Keys.X))
             {
-                Game1.okColors holder = Game1.getSecondaryColor();
+                Game1.getCurrentGameMode().addProjectile(new Projectile(new Point(), new Vector2(), innerColorEnum));
+                innerColorPoolMissing++;
+                innerRectangle.Height = innerRectangle.Height * (innerColorPoolMissing / innerColorPoolMax);
+
+                /* Game1.okColors holder = Game1.getSecondaryColor();
                 Game1.setSecondaryColor(Game1.getBackgroundColor());
-                Game1.setBackgroundColor(holder);
+                Game1.setBackgroundColor(holder); */
             }
 
             if (ks.IsKeyDown(Keys.Z) && !oldks.IsKeyDown(Keys.Z))

@@ -7,10 +7,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using Canvas_theGame.src.Items;
 
 namespace Canvas_theGame.src.GameModes
 {
-    class MainMenu : src.Interfaces.GameMode
+    public class MainMenu : src.Interfaces.GameMode
     {
         private static Player player;
         private static Texture2D text_STORY, text_ENDLESSRUN, text_ENDLESSJUMP, ground_texture;
@@ -18,9 +19,12 @@ namespace Canvas_theGame.src.GameModes
         private List<Items.Barrier> barriers;
         private Point startPos;
 
+        private List<Projectile> projectiles;
+
         public MainMenu()
         {
             barriers = new List<Items.Barrier>();
+            projectiles = new List<Projectile>();
 
             endlessJumpButton = new AABB(new Rectangle(300, 400, 100, 100));
             storyButton = new AABB(new Rectangle(500, 400, 100, 100));
@@ -69,7 +73,11 @@ namespace Canvas_theGame.src.GameModes
 
             foreach (Items.Barrier b in barriers)
             {
-                b.Draw(spriteBatch);
+                b.Draw1(spriteBatch);
+            }
+            foreach (Items.Barrier b in barriers)
+            {
+                b.Draw2(spriteBatch);
             }
 
             player.Draw(spriteBatch);
@@ -86,6 +94,11 @@ namespace Canvas_theGame.src.GameModes
         public Player getPlayer()
         {
             return player;
+        }
+
+        public void addProjectile(Projectile projectile)
+        {
+            projectiles.Add(projectile);
         }
     }
 }

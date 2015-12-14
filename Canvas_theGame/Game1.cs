@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Canvas_theGame.src;
+using Canvas_theGame.src.Items;
 
 namespace Canvas_theGame
 {
@@ -131,6 +132,10 @@ namespace Canvas_theGame
 
             if (ks.IsKeyDown(Keys.Escape))
                 changeGameMode("mainMenu");
+            if (Game1.ks.IsKeyDown(Keys.C) && Game1.oldks.IsKeyUp(Keys.C))
+            {
+                Barrier.dotHiddenPlatforms = !Barrier.dotHiddenPlatforms;
+            }
 
             if (currentGameMode != null) {
                 currentGameMode.Update(gameTime);
@@ -149,6 +154,7 @@ namespace Canvas_theGame
                     currentGameMode.PlayerOutOfBounds();
                 }
             }
+
 
             oldks = ks;
 
@@ -204,6 +210,9 @@ namespace Canvas_theGame
         }
         public static void setBackgroundColor(okColors _backgroundColor) {
             backgroundColor = _backgroundColor;
+        }
+        public static src.Interfaces.GameMode getCurrentGameMode() {
+            return currentGameMode;
         }
         #endregion
     }

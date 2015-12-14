@@ -13,6 +13,7 @@ namespace Canvas_theGame.src.Interfaces
     interface Item
     {
         void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
+        void Draw1(SpriteBatch spriteBatch);
+        void Draw2(SpriteBatch spriteBatch);
     }
 }
