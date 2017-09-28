@@ -1,4 +1,4 @@
-###__Canvas (game)__
+### __Canvas (game)__
 
 _version 1.1.0_
 >__Theses:__
@@ -28,22 +28,22 @@ _version 1.1.0_
  
 
 
-####__Background__
+#### __Background__
 The concept was influenced by the "Giana sisters" main mechanic. 
 I really love the idea of changing reality to better suit the situation.
 Although after a while of playing around with their(the "Giana Sisters") world shifting mechanic i found my self wanting more.
 So i decided to give it a shot my self.
 And so Canvas was born.
 
-####__Design__
+#### __Design__
 The design for Canvas originated in in the first thought i had when i started playing around with the world shifting idea, "A platforming puzzle game about playing with colors".
 I knew i wanted the game to be 2D, and i quickly realized that i wanted it to be heavy play on colors.
 
-####__Game Modes__
+#### __Game Modes__
 * Story
 * 
 
-####__Old Versions__
+#### __Old Versions__
 _version 1.0_
 >__Theses__
 >A platforming puzzle game about playing with colors.
